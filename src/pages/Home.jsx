@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import DynamicBackground from '../components/DynamicBackground';
 import GeometricBackground from '../components/GeometricBackground';
 
-const FALLBACK_IMAGE = '/sample.jpg';
+const FALLBACK_IMAGE = './sample.jpg';
 
 // ─── Reusable scroll-reveal wrapper ──────────────────────────────────────────
 const Reveal = ({ children, delay = 0, direction = 'up', style }) => {
@@ -339,7 +339,7 @@ const Home = () => {
                     <div style={styles.projectGrid}>
                         <ProjectCard
                             to="/projects/1"
-                            img="/sample.jpg"
+                            img="./sample.jpg"
                             alt="Fintech Dashboard"
                             title="Fintech Dashboard"
                             desc="A comprehensive financial dashboard focusing on data visualization and ease of use."
@@ -347,7 +347,7 @@ const Home = () => {
                         />
                         <ProjectCard
                             to="/projects/2"
-                            img="/sample.jpg"
+                            img="./sample.jpg"
                             alt="Eco-Store App"
                             title="Eco-Store App"
                             desc="Sustainable e-commerce mobile app designed with a focus on ethical shopping."

@@ -15,12 +15,12 @@ const Project2 = () => {
         overview: 'A comprehensive rethink of how institutional traders interact with complex real-time data. By simplifying the visual hierarchy and introducing customizable widgets, we increased user efficiency by 30%.',
         problem: 'Traders were overwhelmed by the density of information on legacy platforms, leading to decision fatigue and slower execution times.',
         solution: 'We introduced a modular, dark-themed dashboard that minimizes eye strain and uses progressive disclosure to hide secondary information until needed.',
-        heroImage: '/sample.jpg',
-        persona1: '/sample.jpg',
-        persona2: '/sample.jpg',
-        sitemap: '/sample.jpg',
-        wireframes: ['/sample.jpg', '/sample.jpg', '/sample.jpg'],
-        final: '/sample.jpg'
+        heroImage: './sample.jpg',
+        persona1: './sample.jpg',
+        persona2: './sample.jpg',
+        sitemap: './sample.jpg',
+        wireframes: ['./sample.jpg', './sample.jpg', './sample.jpg'],
+        final: './sample.jpg'
     };
 
     return (
