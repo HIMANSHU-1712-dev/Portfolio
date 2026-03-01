@@ -20,7 +20,7 @@ const Project1 = () => {
         persona2: './tmp2.jpg',
         sitemap: './tmsm.jpg',
         wireframes: ['./tmw1.jpg', './tmw2.jpg', './tmw3.jpg'],
-        final: './tmf.jpg'
+        finalMockups: ['./tmf.jpg']
     };
 
     return (
@@ -102,10 +102,10 @@ const Project1 = () => {
                         <div style={styles.largeImagePlaceholder}>
                             <img src={project.sitemap} alt="Sitemap" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
-                        <div style={styles.imageGrid3}>
+                        <div style={styles.mobileImageGrid}>
                             {project.wireframes.map((wf, idx) => (
-                                <div key={idx} style={styles.imagePlaceholder}>
-                                    <img src={wf} alt={`Wireframe ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div key={idx} style={styles.mobileImagePlaceholder}>
+                                    <img src={wf} alt={`Mobile Wireframe ${idx + 1}`} style={styles.mobileImage} />
                                 </div>
                             ))}
                         </div>
@@ -114,8 +114,12 @@ const Project1 = () => {
                     {/* Final Mockups */}
                     <section style={styles.textSection}>
                         <h2 style={styles.sectionHeader}>High-Fidelity Mockups</h2>
-                        <div style={{ ...styles.largeImagePlaceholder, height: '600px' }}>
-                            <img src={project.final} alt={`${project.title} Final UI`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <div style={styles.mobileImageGrid}>
+                            {project.finalMockups.map((mockup, idx) => (
+                                <div key={idx} style={styles.mobileImagePlaceholder}>
+                                    <img src={mockup} alt={`${project.title} High-Fidelity Mockup ${idx + 1}`} style={styles.mobileImage} />
+                                </div>
+                            ))}
                         </div>
                     </section>
 
@@ -233,6 +237,13 @@ const styles = {
         gap: '2rem',
         marginTop: '2rem',
     },
+    mobileImageGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+        gap: '1.75rem',
+        marginTop: '2rem',
+        justifyItems: 'center',
+    },
     imagePlaceholder: {
         width: '100%',
         aspectRatio: '4/3',
@@ -244,6 +255,25 @@ const styles = {
         justifyContent: 'center',
         color: 'var(--text-secondary)',
         overflow: 'hidden',
+    },
+    mobileImagePlaceholder: {
+        width: '100%',
+        maxWidth: '230px',
+        aspectRatio: '9/19.5',
+        backgroundColor: 'var(--surface-color)',
+        borderRadius: '28px',
+        border: '1px solid var(--glass-border)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+    },
+    mobileImage: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        objectPosition: 'top',
     },
     largeImagePlaceholder: {
         width: '100%',
