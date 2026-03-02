@@ -106,6 +106,26 @@ a {
   object-fit: contain;
 }
 
+@media (hover: none),
+(pointer: coarse) {
+
+  .persona-image-holder,
+  .journey-image-holder {
+    cursor: default;
+  }
+
+  .persona-image-holder:hover,
+  .journey-image-holder:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .persona-image,
+  .journey-image {
+    object-fit: contain;
+  }
+}
+
 /* Typography Utilities */
 .text-gradient {
   background: linear-gradient(135deg, #f0e5ff 0%, #b98ce8 45%, #8778da 100%);

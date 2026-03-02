@@ -114,7 +114,7 @@ const Project2 = () => {
                     {/* Final Mockups */}
                     <section style={styles.textSection}>
                         <h2 style={styles.sectionHeader}>High-Fidelity Mockups</h2>
-                        <div style={{ ...styles.largeImagePlaceholder, height: '600px' }}>
+                        <div style={{ ...styles.largeImagePlaceholder, height: 'clamp(300px, 78vw, 600px)' }}>
                             <img src={project.final} alt={`${project.title} Final UI`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                     </section>
@@ -215,7 +215,7 @@ const styles = {
     splitLayout: {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '4rem',
+        gap: 'clamp(1.5rem, 4vw, 4rem)',
     },
     splitContent: {
         display: 'flex',
@@ -223,13 +223,13 @@ const styles = {
     },
     imageGrid: {
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
         gap: '2rem',
         marginTop: '2rem',
     },
     imageGrid3: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '2rem',
         marginTop: '2rem',
     },
@@ -247,7 +247,7 @@ const styles = {
     },
     largeImagePlaceholder: {
         width: '100%',
-        height: '400px',
+        height: 'clamp(240px, 42vw, 400px)',
         backgroundColor: 'var(--surface-color)',
         borderRadius: 'var(--radius-lg)',
         border: '1px solid var(--glass-border)',

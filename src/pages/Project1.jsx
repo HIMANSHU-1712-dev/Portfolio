@@ -219,7 +219,7 @@ const styles = {
     splitLayout: {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '4rem',
+        gap: 'clamp(1.5rem, 4vw, 4rem)',
     },
     splitContent: {
         display: 'flex',
@@ -227,19 +227,19 @@ const styles = {
     },
     imageGrid: {
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
         gap: '2rem',
         marginTop: '2rem',
     },
     imageGrid3: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '2rem',
         marginTop: '2rem',
     },
     mobileImageGrid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
         gap: '1.75rem',
         marginTop: '2rem',
         justifyItems: 'center',
@@ -277,7 +277,7 @@ const styles = {
     },
     largeImagePlaceholder: {
         width: '100%',
-        height: '400px',
+        height: 'clamp(240px, 42vw, 400px)',
         backgroundColor: 'var(--surface-color)',
         borderRadius: 'var(--radius-lg)',
         border: '1px solid var(--glass-border)',
