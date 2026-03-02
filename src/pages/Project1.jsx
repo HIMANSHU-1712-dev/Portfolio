@@ -98,7 +98,7 @@ const Project1 = () => {
 
                     {/* Wireframes & Sitemaps */}
                     <section style={styles.textSection}>
-                        <h2 style={styles.sectionHeader}>Information Architecture & Wireframes</h2>
+                        <h2 style={styles.sectionHeader}> User Journey Map </h2>
                         <div style={styles.largeImagePlaceholder}>
                             <img src={project.sitemap} alt="Sitemap" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
