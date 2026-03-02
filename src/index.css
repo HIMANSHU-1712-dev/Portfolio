@@ -81,6 +81,27 @@ a {
   padding: var(--spacing-xl) 0;
 }
 
+.persona-image-holder {
+  cursor: zoom-in;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.persona-image-holder:hover {
+  transform: scale(1.02);
+  box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.7);
+  z-index: 2;
+}
+
+.persona-image {
+  display: block;
+  object-fit: cover;
+  transition: filter var(--transition-fast);
+}
+
+.persona-image-holder:hover .persona-image {
+  object-fit: contain;
+}
+
 /* Typography Utilities */
 .text-gradient {
   background: linear-gradient(135deg, #f0e5ff 0%, #b98ce8 45%, #8778da 100%);

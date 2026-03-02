@@ -87,11 +87,11 @@ const Project3 = () => {
                     <section style={styles.textSection}>
                         <h2 style={styles.sectionHeader}>User Personas</h2>
                         <div style={styles.imageGrid}>
-                            <div style={styles.imagePlaceholder}>
-                                <img src={project.persona1} alt="User Persona 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <div style={styles.imagePlaceholder} className="persona-image-holder">
+                                <img src={project.persona1} alt="User Persona 1" className="persona-image" style={{ width: '100%', height: '100%' }} />
                             </div>
-                            <div style={styles.imagePlaceholder}>
-                                <img src={project.persona2} alt="User Persona 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <div style={styles.imagePlaceholder} className="persona-image-holder">
+                                <img src={project.persona2} alt="User Persona 2" className="persona-image" style={{ width: '100%', height: '100%' }} />
                             </div>
                         </div>
                     </section>
