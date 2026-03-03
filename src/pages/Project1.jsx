@@ -15,7 +15,7 @@ const Project1 = () => {
         overview: 'A modern mobile e-commerce app tailored specifically for camping and trekking enthusiasts, offering a focused and seamless shopping experience for outdoor gear.',
         problem: 'There are not many dedicated apps for camping and trekking products, forcing users to rely on generic marketplaces with poor categorization and overwhelming choices.',
         solution: 'A niche, user-centric platform that simplifies discovery through curated categories, intuitive navigation, and a streamlined checkout experience built specifically for outdoor needs.',
-        heroImage: './tmh.jpg',
+        heroImage: './tmh1.jpg',
         persona1: './tmp11.jpg',
         persona2: './tmp22.jpg',
         sitemap: './tmsm.jpg',
