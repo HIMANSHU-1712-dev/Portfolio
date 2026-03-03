@@ -19,7 +19,7 @@ const Project2 = () => {
         persona1: './whp1.jpg',
         persona2: './whp2.jpg',
         sitemap: './whsm.jpg',
-        wireframes: ['./whw1.jpg', './whw2.jpg', './whw3.jpg'],
+        wireframes: ['./p2w1.png', './p2w2.png', './p2w3.png'],
         final: ['./whf1.jpg', './whf2.jpg', './whf3.jpg']
     };
 
@@ -105,8 +105,8 @@ const Project2 = () => {
                         </div>
                         <div style={styles.imageGrid3} className="project-image-grid-3">
                             {project.wireframes.map((wf, idx) => (
-                                <div key={idx} style={styles.imagePlaceholder} className="journey-image-holder">
-                                    <img src={wf} alt={`Wireframe ${idx + 1}`} className="journey-image" style={{ width: '100%', height: '100%' }} />
+                                <div key={idx} style={styles.wireframePlaceholder} className="project2-wireframe-holder">
+                                    <img src={wf} alt={`Wireframe ${idx + 1}`} className="project2-wireframe-image" />
                                 </div>
                             ))}
                         </div>
@@ -229,10 +229,21 @@ const styles = {
         marginTop: '2rem',
     },
     imageGrid3: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        display: 'flex',
+        flexDirection: 'column',
         gap: '2rem',
         marginTop: '2rem',
+    },
+    wireframePlaceholder: {
+        width: '100%',
+        aspectRatio: '16/10',
+        backgroundColor: 'var(--surface-color)',
+        borderRadius: 'var(--radius-md)',
+        border: '1px solid var(--glass-border)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
     },
     imagePlaceholder: {
         width: '100%',

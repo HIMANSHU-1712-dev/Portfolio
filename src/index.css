@@ -125,6 +125,24 @@ a {
   object-position: center;
 }
 
+.project2-wireframe-holder {
+  cursor: zoom-in;
+  background: #f0f0f0 !important;
+}
+
+.project2-wireframe-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.project2-wireframe-holder:hover .project2-wireframe-image {
+  object-fit: contain;
+  object-position: center;
+}
+
 @media (hover: none),
 (pointer: coarse) {
 
@@ -140,7 +158,8 @@ a {
   }
 
   .persona-image,
-  .journey-image {
+  .journey-image,
+  .project2-wireframe-image {
     object-fit: contain;
   }
 }
