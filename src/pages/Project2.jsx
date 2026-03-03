@@ -18,7 +18,7 @@ const Project2 = () => {
         heroImage: './whh.jpg',
         persona1: './p2persona1.png',
         persona2: './p2persona2.png',
-        sitemap: './whsm.jpg',
+        sitemap: './p2journey.jpg',
         wireframes: ['./p2w1.png', './p2w2.png', './p2w3.png'],
         finalMockups: ['./p2m1.png', './p2m2.png', './p2m3.png']
     };
