@@ -116,25 +116,11 @@ const Project1 = () => {
                     <section style={styles.textSection}>
                         <h2 style={styles.sectionHeader} className="project-section-header">High-Fidelity Mockups</h2>
                         <div style={styles.mobileImageGrid} className="project-mobile-image-grid">
-                            {project.finalMockups.map((mockup, idx) => {
-                                const addPhoneFrame = idx > 0;
-
-                                return (
-                                    <div
-                                        key={idx}
-                                        style={styles.mobileImagePlaceholder}
-                                        className={addPhoneFrame ? 'project1-mockup-phone-frame' : undefined}
-                                    >
-                                        {addPhoneFrame ? (
-                                            <div className="project1-mockup-screen">
-                                                <img src={mockup} alt={`${project.title} High-Fidelity Mockup ${idx + 1}`} style={styles.mobileImage} />
-                                            </div>
-                                        ) : (
-                                            <img src={mockup} alt={`${project.title} High-Fidelity Mockup ${idx + 1}`} style={styles.mobileImage} />
-                                        )}
-                                    </div>
-                                );
-                            })}
+                            {project.finalMockups.map((mockup, idx) => (
+                                <div key={idx} style={styles.mobileImagePlaceholder}>
+                                    <img src={mockup} alt={`${project.title} High-Fidelity Mockup ${idx + 1}`} style={styles.mobileImage} />
+                                </div>
+                            ))}
                         </div>
                     </section>
 
