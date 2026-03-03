@@ -8,13 +8,13 @@ const Project3 = () => {
 
     // Hardcoded data for Project 1
     const project = {
-        title: 'Healthcare Portal',
-        category: 'Web App UX',
-        timeline: '3 Months',
-        role: 'Lead Product Designer',
-        overview: 'A comprehensive rethink of how institutional traders interact with complex real-time data. By simplifying the visual hierarchy and introducing customizable widgets, we increased user efficiency by 30%.',
-        problem: 'Traders were overwhelmed by the density of information on legacy platforms, leading to decision fatigue and slower execution times.',
-        solution: 'We introduced a modular, dark-themed dashboard that minimizes eye strain and uses progressive disclosure to hide secondary information until needed.',
+        title: 'The Hunger Games',
+        category: 'UX Research',
+        timeline: '1 Month',
+        role: 'UX Reseacher & Analyst',
+        Introduction: 'Swiggy and Zomato have transformed the way urban users discover, order, and experience food. While both platforms offer similar core services—food delivery, dine-in bookings, and loyalty programs—their user experiences differ significantly in design clarity, task efficiency, and service perception. This UX comparative study analyzes both platforms across key user journeys to understand how design decisions influence usability, satisfaction, and overall user preference. By combining feature evaluation with real user feedback from 40 participants, this study aims to uncover which platform delivers a more seamless and intuitive experience.',
+        problem: 'Despite offering comparable services, Swiggy and Zomato adopt different UX approaches in navigation, checkout flows, personalization, and support systems. However, it remains unclear how these differences impact real user satisfaction and behavioral preference.The core problem this study addresses is: Which platform provides a superior end-to-end user experience, and what specific UX elements drive that perception?Understanding these differences can reveal broader insights into speed vs. depth in design strategy, and how minimalism, transparency, and support responsiveness affect user trust and loyalty.',
+        scope: 'This study evaluates both platforms across critical stages of the food ordering journey, including: Onboarding & App Layout | Food Discovery & Filtering | Checkout & Payment Flow | Delivery & Post-Order Experience | Offers, Discounts & Loyalty Programs | Dine-In & Table Booking Features | Customer Support & Issue Resolution | The research is based on: A structured comparative feature analysis | Survey responses from 40 participants | Qualitative feedback on pain points and satisfaction. The objective is not to declare a winner, but to identify strengths, weaknesses, and strategic UX differences that shape overall user perception.',
         heroImage: './bmw.jpg',
         surveyResponses: [
             './p3survey1.png',
