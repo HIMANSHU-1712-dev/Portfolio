@@ -48,7 +48,7 @@ const ProjectImage = ({ src, alt }) => {
 const Projects = () => {
     // Mock data for projects
     const projects = [
-        { id: 1, title: 'TrekMate', category: 'Mobile App', image: './tmf1.jpg' },
+        { id: 1, title: 'TrekMate', category: 'Mobile App', image: './tmcp.png' },
         { id: 2, title: 'WorkHive', category: 'Platfrom', image: './sample.jpg' },
         { id: 3, title: 'Healthcare Portal', category: 'Web App UX', image: './sample.jpg' },
         { id: 4, title: 'SaaS Platform Redesign', category: 'Design System', image: './sample.jpg' }
