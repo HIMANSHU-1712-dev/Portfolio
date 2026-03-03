@@ -16,8 +16,8 @@ const Project2 = () => {
         problem: 'The current job ecosystem is fragmented and overwhelming. Job seekers rely on multiple tools for job discovery, networking, salary research, and company reviews, leading to scattered information and inefficient decision-making. Interfaces are often cluttered with poor categorization, making it difficult to filter relevant opportunities. Recruiters, on the other hand, struggle with inconsistent candidate data, lack of verified insights, and time consuming shortlisting processes.',
         solution: 'A user-centric platform that integrates job search, candidate discovery, company ratings, salary insights, and relocation cost estimation into a single ecosystem. Features like refined filters, assisted search, and structured candidate profiles enable faster and more relevant matching. By combining data transparency with intuitive navigation, WorkHive streamlines the hiring journey helping users make confident decisions and enabling recruiters to efficiently identify and engage the right talent.',
         heroImage: './whh.jpg',
-        persona1: './whp1.jpg',
-        persona2: './whp2.jpg',
+        persona1: './p2persona1.png',
+        persona2: './p2persona2.png',
         sitemap: './whsm.jpg',
         wireframes: ['./p2w1.png', './p2w2.png', './p2w3.png'],
         finalMockups: ['./p2m1.png', './p2m2.png', './p2m3.png']
