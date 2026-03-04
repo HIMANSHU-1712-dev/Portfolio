@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 
@@ -8,9 +8,53 @@ const Project2 = () => {
     const mockupTextRef = useRef(null);
     const mockupTextInView = useInView(mockupTextRef, { once: true, amount: 0.35 });
     const [typedMockupText, setTypedMockupText] = useState('');
+    const audioContextRef = useRef(null);
+    const lastSoundAtRef = useRef(0);
     const mockupNarrative = `These mockups present WorkHive as a comprehensive career platform designed to support users across every stage of their professional journey. Rather than functioning as a traditional job board, the platform integrates structured job discovery, network-driven opportunity mapping, and data-backed decision tools such as salary insights and cost-of-living estimation.
 
 Each interface is built with clarity and hierarchy in mind prioritizing scannable job cards, contextual filters, match indicators, and actionable CTAs. The goal is to reduce cognitive load, increase decision confidence, and create a seamless experience where users can discover roles, leverage connections, and evaluate career moves within a single, unified ecosystem.`;
+
+    const playTypewriterClick = useCallback((char) => {
+        if (!char || /\s/.test(char)) return;
+
+        const now = window.performance.now();
+        if (now - lastSoundAtRef.current < 35) return;
+        lastSoundAtRef.current = now;
+
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+
+        if (!audioContextRef.current) {
+            try {
+                audioContextRef.current = new AudioContextClass();
+            } catch {
+                return;
+            }
+        }
+
+        const audioContext = audioContextRef.current;
+        if (!audioContext) return;
+
+        if (audioContext.state === 'suspended') {
+            audioContext.resume().catch(() => { });
+        }
+
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const start = audioContext.currentTime;
+
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(1600 + Math.random() * 180, start);
+
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.018, start + 0.002);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.028);
+
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.start(start);
+        osc.stop(start + 0.03);
+    }, []);
 
     useEffect(() => {
         if (!mockupTextInView) return;
@@ -19,13 +63,23 @@ Each interface is built with clarity and hierarchy in mind prioritizing scannabl
         const intervalId = window.setInterval(() => {
             charIndex += 1;
             setTypedMockupText(mockupNarrative.slice(0, charIndex));
+            playTypewriterClick(mockupNarrative[charIndex - 1]);
             if (charIndex >= mockupNarrative.length) {
                 window.clearInterval(intervalId);
             }
-        }, 15);
+        }, 35);
 
         return () => window.clearInterval(intervalId);
-    }, [mockupTextInView, mockupNarrative]);
+    }, [mockupTextInView, mockupNarrative, playTypewriterClick]);
+
+    useEffect(() => {
+        return () => {
+            if (audioContextRef.current) {
+                audioContextRef.current.close().catch(() => { });
+                audioContextRef.current = null;
+            }
+        };
+    }, []);
 
     // Hardcoded data for Project 1
     const project = {
