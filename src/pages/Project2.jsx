@@ -114,6 +114,11 @@ const Project2 = () => {
                                             A structured job discovery interface designed to minimize friction and cognitive load. Advanced filters remain accessible at all times, enabling precise refinement without disrupting the browsing flow. Clear CTAs support both direct applications and network-driven referrals.
                                         </p>
                                     )}
+                                    {idx === 1 && (
+                                        <p style={styles.wireframeDescription}>
+                                            A visual network-mapping interface that highlights role relevance through dynamic relationship nodes. Instead of a static list, users can explore career pathways and company overlaps contextually. The match percentage reinforces confidence in opportunity alignment.
+                                        </p>
+                                    )}
                                 </div>
                             ))}
                         </div>
