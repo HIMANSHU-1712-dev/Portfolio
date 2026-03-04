@@ -9,7 +9,7 @@ const Project4 = () => {
     const project = {
         title: 'Photography Journal',
         category: 'Photography',
-        heroImage: './sample.jpg',
+        heroImage: './swiss.jpg',
         gallery: [
             { src: './project4/IMG_6084.HEIC', alt: 'Snow-covered mountain range under dramatic sky' },
             { src: './project4/IMG_5879.HEIC', alt: 'Orange sports car reflected on glossy surface' },
