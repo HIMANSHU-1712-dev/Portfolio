@@ -8,6 +8,7 @@ const FALLBACK_IMAGE = './sample.jpg';
 const HERO_TYPED_TEXT = 'Crafting digital\nexperiences that\ninspire.';
 const HERO_GRADIENT_START = HERO_TYPED_TEXT.indexOf('digital');
 const HERO_GRADIENT_END = HERO_GRADIENT_START + 'digital\nexperiences'.length;
+const HERO_TYPO_WORD = 'thnik';
 
 // ─── Reusable scroll-reveal wrapper ──────────────────────────────────────────
 const Reveal = ({ children, delay = 0, direction = 'up', style }) => {
@@ -234,7 +235,7 @@ const Home = () => {
     const heroActionsOpacity = useTransform(scrollY, [0, 560, 760], [1, 1, 0]);
     const geometryOpacity = useTransform(scrollY, [220, 620], [0, 1]);
     const geometryScale = useTransform(scrollY, [220, 620], [0.97, 1]);
-    const [typedHeroLength, setTypedHeroLength] = useState(0);
+    const [typedHeroText, setTypedHeroText] = useState('');
     const [isHeroThinking, setIsHeroThinking] = useState(true);
     const heroAudioContextRef = useRef(null);
     const heroNoiseBufferRef = useRef(null);
@@ -251,17 +252,18 @@ const Home = () => {
     }, []);
 
     const heroTypedParts = useMemo(() => {
-        const safeLength = Math.max(0, Math.min(typedHeroLength, HERO_TYPED_TEXT.length));
+        const safeLength = typedHeroText.length;
         return {
-            prefix: HERO_TYPED_TEXT.slice(0, Math.min(safeLength, HERO_GRADIENT_START)),
+            prefix: typedHeroText.slice(0, Math.min(safeLength, HERO_GRADIENT_START)),
             gradient: safeLength > HERO_GRADIENT_START
-                ? HERO_TYPED_TEXT.slice(HERO_GRADIENT_START, Math.min(safeLength, HERO_GRADIENT_END))
+                ? typedHeroText.slice(HERO_GRADIENT_START, Math.min(safeLength, HERO_GRADIENT_END))
                 : '',
             suffix: safeLength > HERO_GRADIENT_END
-                ? HERO_TYPED_TEXT.slice(HERO_GRADIENT_END, safeLength)
+                ? typedHeroText.slice(HERO_GRADIENT_END, safeLength)
                 : '',
         };
-    }, [typedHeroLength]);
+    }, [typedHeroText]);
+    const showHeroCursor = typedHeroText !== HERO_TYPED_TEXT;
 
     const ensureHeroAudioContext = useCallback(() => {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -293,8 +295,8 @@ const Home = () => {
         return context;
     }, []);
 
-    const playHeroTypeSound = useCallback((char) => {
-        if (!char || char === '\n') return;
+    const playHeroTypeSound = useCallback((mode, char = '') => {
+        if (mode === 'type' && (!char || char === '\n')) return;
 
         const nowMs = window.performance.now();
         if (nowMs - lastHeroKeyAtRef.current < 28) return;
@@ -303,50 +305,76 @@ const Home = () => {
         const context = ensureHeroAudioContext();
         if (!context || context.state !== 'running') return;
 
-        const isSpace = char === ' ';
+        const isSpace = mode === 'type' && char === ' ';
+        const isBackspace = mode === 'backspace';
         const start = context.currentTime;
-        const duration = isSpace ? 0.1 : 0.07;
+        const duration = isBackspace ? 0.065 : isSpace ? 0.09 : 0.075;
 
         const masterGain = context.createGain();
         masterGain.gain.setValueAtTime(0.0001, start);
-        masterGain.gain.exponentialRampToValueAtTime(isSpace ? 0.075 : 0.12, start + 0.003);
+        masterGain.gain.exponentialRampToValueAtTime(isBackspace ? 0.16 : isSpace ? 0.09 : 0.15, start + 0.0025);
         masterGain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
         masterGain.connect(context.destination);
 
         const clickOsc = context.createOscillator();
         const clickGain = context.createGain();
         clickOsc.type = 'square';
-        clickOsc.frequency.setValueAtTime(isSpace ? 170 : 1350 + Math.random() * 180, start);
+        clickOsc.frequency.setValueAtTime(
+            isBackspace ? 980 + Math.random() * 120 : isSpace ? 150 : 1450 + Math.random() * 210,
+            start
+        );
         clickGain.gain.setValueAtTime(0.0001, start);
-        clickGain.gain.exponentialRampToValueAtTime(isSpace ? 0.18 : 0.8, start + 0.002);
-        clickGain.gain.exponentialRampToValueAtTime(0.0001, start + duration * 0.7);
+        clickGain.gain.exponentialRampToValueAtTime(isBackspace ? 0.62 : isSpace ? 0.24 : 0.86, start + 0.0018);
+        clickGain.gain.exponentialRampToValueAtTime(0.0001, start + duration * 0.62);
         clickOsc.connect(clickGain);
         clickGain.connect(masterGain);
 
         const bodyOsc = context.createOscillator();
         const bodyGain = context.createGain();
         bodyOsc.type = 'triangle';
-        bodyOsc.frequency.setValueAtTime(isSpace ? 95 : 280 + Math.random() * 90, start);
+        bodyOsc.frequency.setValueAtTime(
+            isBackspace ? 215 + Math.random() * 40 : isSpace ? 90 : 240 + Math.random() * 80,
+            start
+        );
         bodyGain.gain.setValueAtTime(0.0001, start);
-        bodyGain.gain.exponentialRampToValueAtTime(isSpace ? 0.28 : 0.42, start + 0.004);
+        bodyGain.gain.exponentialRampToValueAtTime(isBackspace ? 0.54 : isSpace ? 0.28 : 0.48, start + 0.003);
         bodyGain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
         bodyOsc.connect(bodyGain);
         bodyGain.connect(masterGain);
+
+        const pingOsc = context.createOscillator();
+        const pingGain = context.createGain();
+        pingOsc.type = 'sine';
+        pingOsc.frequency.setValueAtTime(
+            isBackspace ? 1750 + Math.random() * 100 : 2100 + Math.random() * 200,
+            start
+        );
+        pingGain.gain.setValueAtTime(0.0001, start);
+        pingGain.gain.exponentialRampToValueAtTime(isBackspace ? 0.07 : 0.12, start + 0.0015);
+        pingGain.gain.exponentialRampToValueAtTime(0.0001, start + duration * 0.45);
+        pingOsc.connect(pingGain);
+        pingGain.connect(masterGain);
 
         clickOsc.start(start);
         clickOsc.stop(start + duration);
         bodyOsc.start(start);
         bodyOsc.stop(start + duration);
+        pingOsc.start(start);
+        pingOsc.stop(start + duration * 0.45);
 
         if (heroNoiseBufferRef.current) {
             const noise = context.createBufferSource();
             const noiseFilter = context.createBiquadFilter();
             const noiseGain = context.createGain();
             noise.buffer = heroNoiseBufferRef.current;
-            noiseFilter.type = 'highpass';
-            noiseFilter.frequency.setValueAtTime(isSpace ? 500 : 1800, start);
+            noiseFilter.type = 'bandpass';
+            noiseFilter.frequency.setValueAtTime(
+                isBackspace ? 1450 : isSpace ? 620 : 1950,
+                start
+            );
+            noiseFilter.Q.setValueAtTime(0.9, start);
             noiseGain.gain.setValueAtTime(0.0001, start);
-            noiseGain.gain.exponentialRampToValueAtTime(isSpace ? 0.12 : 0.2, start + 0.001);
+            noiseGain.gain.exponentialRampToValueAtTime(isBackspace ? 0.22 : isSpace ? 0.11 : 0.18, start + 0.001);
             noiseGain.gain.exponentialRampToValueAtTime(0.0001, start + duration * 0.55);
             noise.connect(noiseFilter);
             noiseFilter.connect(noiseGain);
@@ -374,47 +402,79 @@ const Home = () => {
     }, [ensureHeroAudioContext]);
 
     useEffect(() => {
-        let charIndex = 0;
+        const introText = 'Crafting digital\nexperiences ';
+        const finalText = 'that\ninspire.';
+        const operations = [
+            ...introText.split('').map((char) => ({ kind: 'type', char })),
+            { kind: 'pause', min: 420, max: 820 },
+            ...HERO_TYPO_WORD.split('').map((char) => ({ kind: 'type', char })),
+            { kind: 'pause', min: 480, max: 920 },
+            ...Array.from({ length: HERO_TYPO_WORD.length }, () => ({ kind: 'backspace' })),
+            { kind: 'pause', min: 180, max: 380 },
+            ...finalText.split('').map((char) => ({ kind: 'type', char })),
+        ];
+
+        setTypedHeroText('');
+        setIsHeroThinking(true);
+
+        let opIndex = 0;
         let timeoutId;
         let stopped = false;
 
         const randomBetween = (min, max) => min + Math.random() * (max - min);
 
-        const typeNext = () => {
+        const queueNext = (delay, thinking, next) => {
+            setIsHeroThinking(thinking);
+            timeoutId = window.setTimeout(() => {
+                if (thinking) setIsHeroThinking(false);
+                next();
+            }, delay);
+        };
+
+        const runNext = () => {
             if (stopped) return;
-            if (charIndex >= HERO_TYPED_TEXT.length) {
+            if (opIndex >= operations.length) {
                 setIsHeroThinking(false);
                 return;
             }
 
-            charIndex += 1;
-            const currentChar = HERO_TYPED_TEXT[charIndex - 1];
-            setTypedHeroLength(charIndex);
-            playHeroTypeSound(currentChar);
+            const operation = operations[opIndex];
+            opIndex += 1;
 
-            let nextDelay = randomBetween(88, 190);
-            if (currentChar === ' ' && Math.random() < 0.26) {
-                nextDelay += randomBetween(220, 620);
-            }
-            if (currentChar === '\n') {
-                nextDelay += randomBetween(260, 480);
-            }
-            if (/[.,!?]/.test(currentChar)) {
-                nextDelay += randomBetween(340, 760);
+            if (operation.kind === 'pause') {
+                queueNext(randomBetween(operation.min, operation.max), true, runNext);
+                return;
             }
 
-            const thinkingPause = nextDelay > 260;
-            setIsHeroThinking(thinkingPause);
+            if (operation.kind === 'type') {
+                setTypedHeroText((prev) => prev + operation.char);
+                playHeroTypeSound('type', operation.char);
 
-            timeoutId = window.setTimeout(() => {
-                if (thinkingPause) setIsHeroThinking(false);
-                typeNext();
-            }, nextDelay);
+                let nextDelay = randomBetween(95, 210);
+                if (operation.char === ' ') {
+                    nextDelay += randomBetween(70, 190);
+                }
+                if (operation.char === '\n') {
+                    nextDelay += randomBetween(240, 460);
+                }
+                if (/[.,!?]/.test(operation.char)) {
+                    nextDelay += randomBetween(320, 760);
+                }
+
+                const thinkingPause = nextDelay > 320;
+                queueNext(nextDelay, thinkingPause, runNext);
+                return;
+            }
+
+            if (operation.kind === 'backspace') {
+                setTypedHeroText((prev) => prev.slice(0, -1));
+                playHeroTypeSound('backspace');
+                queueNext(randomBetween(70, 120), false, runNext);
+            }
         };
 
         timeoutId = window.setTimeout(() => {
-            setIsHeroThinking(false);
-            typeNext();
+            runNext();
         }, 280);
 
         return () => {
@@ -471,15 +531,17 @@ const Home = () => {
                                 </span>
                             )}
                             {renderTypedLines(heroTypedParts.suffix)}
-                            <motion.span
-                                style={styles.typeCursor}
-                                animate={isHeroThinking ? { opacity: [0, 1, 0] } : { opacity: 1 }}
-                                transition={isHeroThinking
-                                    ? { duration: 0.9, repeat: Infinity, ease: 'easeInOut' }
-                                    : { duration: 0.12, ease: 'linear' }}
-                            >
-                                |
-                            </motion.span>
+                            {showHeroCursor && (
+                                <motion.span
+                                    style={styles.typeCursor}
+                                    animate={isHeroThinking ? { opacity: [0, 1, 0] } : { opacity: 1 }}
+                                    transition={isHeroThinking
+                                        ? { duration: 0.9, repeat: Infinity, ease: 'easeInOut' }
+                                        : { duration: 0.12, ease: 'linear' }}
+                                >
+                                    |
+                                </motion.span>
+                            )}
                         </motion.h1>
 
                         <motion.p
