@@ -620,19 +620,19 @@ const Home = () => {
 
                     <div style={styles.projectGrid} className="home-project-grid">
                         <ProjectCard
-                            to="/projects/1"
+                            to="/projects/2"
                             img="./bmw.jpg"
-                            alt="Fintech Dashboard"
-                            title="Fintech Dashboard"
-                            desc="A comprehensive financial dashboard focusing on data visualization and ease of use."
+                            alt="Workhive"
+                            title="Workhive"
+                            desc="A unified platform for job search and professional networking."
                             index={0}
                         />
                         <ProjectCard
-                            to="/projects/2"
+                            to="/projects/3"
                             img="./sample.jpg"
-                            alt="Eco-Store App"
-                            title="Eco-Store App"
-                            desc="Sustainable e-commerce mobile app designed with a focus on ethical shopping."
+                            alt="The Hunger Games: UX Case Study"
+                            title="The Hunger Games: UX Case Study"
+                            desc="A data-driven UX study comparing Swiggy and Zomato across key user journeys."
                             index={1}
                         />
                     </div>
