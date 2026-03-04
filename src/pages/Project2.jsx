@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 
 const Project2 = () => {
     const { scrollYProgress } = useScroll();
     const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+    const mockupTextRef = useRef(null);
+    const mockupTextInView = useInView(mockupTextRef, { once: true, amount: 0.35 });
+    const [typedMockupText, setTypedMockupText] = useState('');
+    const mockupNarrative = `These mockups present WorkHive as a comprehensive career platform designed to support users across every stage of their professional journey. Rather than functioning as a traditional job board, the platform integrates structured job discovery, network-driven opportunity mapping, and data-backed decision tools such as salary insights and cost-of-living estimation.
+
+Each interface is built with clarity and hierarchy in mind prioritizing scannable job cards, contextual filters, match indicators, and actionable CTAs. The goal is to reduce cognitive load, increase decision confidence, and create a seamless experience where users can discover roles, leverage connections, and evaluate career moves within a single, unified ecosystem.`;
+
+    useEffect(() => {
+        if (!mockupTextInView) return;
+
+        let charIndex = 0;
+        const intervalId = window.setInterval(() => {
+            charIndex += 1;
+            setTypedMockupText(mockupNarrative.slice(0, charIndex));
+            if (charIndex >= mockupNarrative.length) {
+                window.clearInterval(intervalId);
+            }
+        }, 15);
+
+        return () => window.clearInterval(intervalId);
+    }, [mockupTextInView, mockupNarrative]);
 
     // Hardcoded data for Project 1
     const project = {
@@ -134,10 +155,27 @@ const Project2 = () => {
                         <h2 style={styles.sectionHeader} className="project-section-header">High-Fidelity Mockups</h2>
                         <div style={styles.mockupStack} className="project-image-grid-3">
                             {project.finalMockups.map((mockup, idx) => (
-                                <div key={idx} style={styles.wireframePlaceholder} className="project2-wireframe-holder">
-                                    <img src={mockup} alt={`${project.title} Final Mockup ${idx + 1}`} className="project2-wireframe-image" />
-                                </div>
+                                <motion.div
+                                    key={idx}
+                                    style={styles.mockupMotionWrapper}
+                                    initial={{ opacity: 0, y: 80, scale: 0.95 }}
+                                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                                    viewport={{ once: true, amount: 0.25 }}
+                                    transition={{ duration: 0.8, delay: idx * 0.18, ease: [0.22, 1, 0.36, 1] }}
+                                >
+                                    <motion.div
+                                        style={styles.wireframePlaceholder}
+                                        className="project2-wireframe-holder"
+                                        animate={{ y: [0, -10, 0] }}
+                                        transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.35 }}
+                                    >
+                                        <img src={mockup} alt={`${project.title} Final Mockup ${idx + 1}`} className="project2-wireframe-image" />
+                                    </motion.div>
+                                </motion.div>
                             ))}
+                        </div>
+                        <div ref={mockupTextRef} style={styles.mockupNarrativeWrap}>
+                            <p style={styles.mockupNarrativeText}>{typedMockupText}</p>
                         </div>
                     </section>
 
@@ -261,6 +299,9 @@ const styles = {
         gap: '2rem',
         marginTop: '2rem',
     },
+    mockupMotionWrapper: {
+        width: '100%',
+    },
     wireframeItem: {
         display: 'flex',
         flexDirection: 'column',
@@ -282,6 +323,17 @@ const styles = {
         fontSize: '1.05rem',
         color: 'var(--text-secondary)',
         lineHeight: '1.7',
+    },
+    mockupNarrativeWrap: {
+        marginTop: '1.5rem',
+    },
+    mockupNarrativeText: {
+        margin: 0,
+        fontSize: '1.1rem',
+        color: 'var(--text-secondary)',
+        lineHeight: '1.8',
+        textAlign: 'justify',
+        whiteSpace: 'pre-line',
     },
     imagePlaceholder: {
         width: '100%',
