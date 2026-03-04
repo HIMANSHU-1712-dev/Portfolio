@@ -1,10 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import DynamicBackground from '../components/DynamicBackground';
 import GeometricBackground from '../components/GeometricBackground';
 
 const FALLBACK_IMAGE = './sample.jpg';
+const HERO_TYPED_TEXT = 'Crafting digital\nexperiences that\ninspire.';
+const HERO_GRADIENT_START = HERO_TYPED_TEXT.indexOf('digital');
+const HERO_GRADIENT_END = HERO_GRADIENT_START + 'digital\nexperiences'.length;
 
 // ─── Reusable scroll-reveal wrapper ──────────────────────────────────────────
 const Reveal = ({ children, delay = 0, direction = 'up', style }) => {
@@ -231,6 +234,203 @@ const Home = () => {
     const heroActionsOpacity = useTransform(scrollY, [0, 560, 760], [1, 1, 0]);
     const geometryOpacity = useTransform(scrollY, [220, 620], [0, 1]);
     const geometryScale = useTransform(scrollY, [220, 620], [0.97, 1]);
+    const [typedHeroLength, setTypedHeroLength] = useState(0);
+    const [isHeroThinking, setIsHeroThinking] = useState(true);
+    const heroAudioContextRef = useRef(null);
+    const heroNoiseBufferRef = useRef(null);
+    const lastHeroKeyAtRef = useRef(0);
+
+    const renderTypedLines = useCallback((text) => {
+        const lines = text.split('\n');
+        return lines.map((line, index) => (
+            <React.Fragment key={`${index}-${line}`}>
+                {line}
+                {index < lines.length - 1 ? <br /> : null}
+            </React.Fragment>
+        ));
+    }, []);
+
+    const heroTypedParts = useMemo(() => {
+        const safeLength = Math.max(0, Math.min(typedHeroLength, HERO_TYPED_TEXT.length));
+        return {
+            prefix: HERO_TYPED_TEXT.slice(0, Math.min(safeLength, HERO_GRADIENT_START)),
+            gradient: safeLength > HERO_GRADIENT_START
+                ? HERO_TYPED_TEXT.slice(HERO_GRADIENT_START, Math.min(safeLength, HERO_GRADIENT_END))
+                : '',
+            suffix: safeLength > HERO_GRADIENT_END
+                ? HERO_TYPED_TEXT.slice(HERO_GRADIENT_END, safeLength)
+                : '',
+        };
+    }, [typedHeroLength]);
+
+    const ensureHeroAudioContext = useCallback(() => {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+
+        if (!heroAudioContextRef.current) {
+            try {
+                heroAudioContextRef.current = new AudioContextClass();
+            } catch {
+                return null;
+            }
+        }
+
+        const context = heroAudioContextRef.current;
+        if (context.state === 'suspended') {
+            context.resume().catch(() => { });
+        }
+
+        if (!heroNoiseBufferRef.current && context.state === 'running') {
+            const length = Math.floor(context.sampleRate * 0.05);
+            const noiseBuffer = context.createBuffer(1, length, context.sampleRate);
+            const channel = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < length; i += 1) {
+                channel[i] = (Math.random() * 2 - 1) * (1 - i / length);
+            }
+            heroNoiseBufferRef.current = noiseBuffer;
+        }
+
+        return context;
+    }, []);
+
+    const playHeroTypeSound = useCallback((char) => {
+        if (!char || char === '\n') return;
+
+        const nowMs = window.performance.now();
+        if (nowMs - lastHeroKeyAtRef.current < 28) return;
+        lastHeroKeyAtRef.current = nowMs;
+
+        const context = ensureHeroAudioContext();
+        if (!context || context.state !== 'running') return;
+
+        const isSpace = char === ' ';
+        const start = context.currentTime;
+        const duration = isSpace ? 0.06 : 0.045;
+
+        const masterGain = context.createGain();
+        masterGain.gain.setValueAtTime(0.0001, start);
+        masterGain.gain.exponentialRampToValueAtTime(isSpace ? 0.025 : 0.018, start + 0.003);
+        masterGain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+        masterGain.connect(context.destination);
+
+        const clickOsc = context.createOscillator();
+        const clickGain = context.createGain();
+        clickOsc.type = 'square';
+        clickOsc.frequency.setValueAtTime(isSpace ? 170 : 1350 + Math.random() * 180, start);
+        clickGain.gain.setValueAtTime(0.0001, start);
+        clickGain.gain.exponentialRampToValueAtTime(isSpace ? 0.005 : 0.012, start + 0.002);
+        clickGain.gain.exponentialRampToValueAtTime(0.0001, start + duration * 0.7);
+        clickOsc.connect(clickGain);
+        clickGain.connect(masterGain);
+
+        const bodyOsc = context.createOscillator();
+        const bodyGain = context.createGain();
+        bodyOsc.type = 'triangle';
+        bodyOsc.frequency.setValueAtTime(isSpace ? 95 : 280 + Math.random() * 90, start);
+        bodyGain.gain.setValueAtTime(0.0001, start);
+        bodyGain.gain.exponentialRampToValueAtTime(isSpace ? 0.013 : 0.01, start + 0.004);
+        bodyGain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+        bodyOsc.connect(bodyGain);
+        bodyGain.connect(masterGain);
+
+        clickOsc.start(start);
+        clickOsc.stop(start + duration);
+        bodyOsc.start(start);
+        bodyOsc.stop(start + duration);
+
+        if (heroNoiseBufferRef.current) {
+            const noise = context.createBufferSource();
+            const noiseFilter = context.createBiquadFilter();
+            const noiseGain = context.createGain();
+            noise.buffer = heroNoiseBufferRef.current;
+            noiseFilter.type = 'highpass';
+            noiseFilter.frequency.setValueAtTime(isSpace ? 500 : 1800, start);
+            noiseGain.gain.setValueAtTime(0.0001, start);
+            noiseGain.gain.exponentialRampToValueAtTime(isSpace ? 0.0018 : 0.0048, start + 0.001);
+            noiseGain.gain.exponentialRampToValueAtTime(0.0001, start + duration * 0.55);
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(masterGain);
+            noise.start(start);
+            noise.stop(start + duration * 0.55);
+        }
+    }, [ensureHeroAudioContext]);
+
+    useEffect(() => {
+        const warmAudio = () => {
+            ensureHeroAudioContext();
+        };
+
+        warmAudio();
+        window.addEventListener('pointerdown', warmAudio, { passive: true });
+        window.addEventListener('keydown', warmAudio);
+        window.addEventListener('touchstart', warmAudio, { passive: true });
+
+        return () => {
+            window.removeEventListener('pointerdown', warmAudio);
+            window.removeEventListener('keydown', warmAudio);
+            window.removeEventListener('touchstart', warmAudio);
+        };
+    }, [ensureHeroAudioContext]);
+
+    useEffect(() => {
+        let charIndex = 0;
+        let timeoutId;
+        let stopped = false;
+
+        const randomBetween = (min, max) => min + Math.random() * (max - min);
+
+        const typeNext = () => {
+            if (stopped) return;
+            if (charIndex >= HERO_TYPED_TEXT.length) {
+                setIsHeroThinking(false);
+                return;
+            }
+
+            charIndex += 1;
+            const currentChar = HERO_TYPED_TEXT[charIndex - 1];
+            setTypedHeroLength(charIndex);
+            playHeroTypeSound(currentChar);
+
+            let nextDelay = randomBetween(88, 190);
+            if (currentChar === ' ' && Math.random() < 0.26) {
+                nextDelay += randomBetween(220, 620);
+            }
+            if (currentChar === '\n') {
+                nextDelay += randomBetween(260, 480);
+            }
+            if (/[.,!?]/.test(currentChar)) {
+                nextDelay += randomBetween(340, 760);
+            }
+
+            const thinkingPause = nextDelay > 260;
+            setIsHeroThinking(thinkingPause);
+
+            timeoutId = window.setTimeout(() => {
+                if (thinkingPause) setIsHeroThinking(false);
+                typeNext();
+            }, nextDelay);
+        };
+
+        timeoutId = window.setTimeout(() => {
+            setIsHeroThinking(false);
+            typeNext();
+        }, 280);
+
+        return () => {
+            stopped = true;
+            window.clearTimeout(timeoutId);
+        };
+    }, [playHeroTypeSound]);
+
+    useEffect(() => {
+        return () => {
+            if (heroAudioContextRef.current) {
+                heroAudioContextRef.current.close().catch(() => { });
+                heroAudioContextRef.current = null;
+            }
+        };
+    }, []);
 
     const skills = ['UI Design', 'UX Research', 'Prototyping', 'Design Systems', '3D Modeling', 'Motion Design', 'Interaction Design', 'Brand Identity'];
 
@@ -264,9 +464,22 @@ const Home = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.25, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                         >
-                            Crafting{' '}
-                            <span className="text-gradient">digital<br />experiences</span>{' '}
-                            that<br />inspire.
+                            {renderTypedLines(heroTypedParts.prefix)}
+                            {heroTypedParts.gradient && (
+                                <span className="text-gradient">
+                                    {renderTypedLines(heroTypedParts.gradient)}
+                                </span>
+                            )}
+                            {renderTypedLines(heroTypedParts.suffix)}
+                            <motion.span
+                                style={styles.typeCursor}
+                                animate={isHeroThinking ? { opacity: [0, 1, 0] } : { opacity: 1 }}
+                                transition={isHeroThinking
+                                    ? { duration: 0.9, repeat: Infinity, ease: 'easeInOut' }
+                                    : { duration: 0.12, ease: 'linear' }}
+                            >
+                                |
+                            </motion.span>
                         </motion.h1>
 
                         <motion.p
@@ -437,6 +650,13 @@ const styles = {
         lineHeight: 0.96,
         marginBottom: '1.2rem',
         textShadow: '0 0 80px rgba(185, 140, 232, 0.18)',
+    },
+    typeCursor: {
+        display: 'inline-block',
+        width: '0.6ch',
+        marginLeft: '0.06em',
+        color: 'rgba(230, 214, 255, 0.9)',
+        verticalAlign: 'baseline',
     },
     heroSubtitle: {
         fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
