@@ -10,6 +10,10 @@ const Project4 = () => {
         title: 'Photography Journal',
         category: 'Photography',
         heroImage: './swiss.jpg',
+        centerpiece: {
+            src: './project4/swiss.jpg',
+            alt: 'Swiss alpine mountain panorama'
+        },
         gallery: [
             { src: './project4/IMG_6084.HEIC', alt: 'Snow-covered mountain range under dramatic sky' },
             { src: './project4/IMG_5879.HEIC', alt: 'Orange sports car reflected on glossy surface' },
@@ -64,6 +68,21 @@ const Project4 = () => {
                             </blockquote>
                         ))}
                     </div>
+
+                    <motion.figure
+                        style={styles.centerpiece}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.75 }}
+                    >
+                        <div style={styles.centerpieceBadge}>Centerpiece</div>
+                        <img
+                            src={project.centerpiece.src}
+                            alt={project.centerpiece.alt}
+                            style={styles.centerpieceImage}
+                        />
+                    </motion.figure>
 
                     <div className="project4-masonry" style={styles.masonry}>
                         {project.gallery.map((photo, index) => (
@@ -167,6 +186,37 @@ const styles = {
     },
     masonry: {
         columnGap: '1.2rem',
+    },
+    centerpiece: {
+        position: 'relative',
+        margin: '0 auto 2rem',
+        padding: '0.6rem',
+        borderRadius: 'var(--radius-lg)',
+        border: '1px solid rgba(185, 140, 232, 0.45)',
+        background: 'linear-gradient(155deg, rgba(185, 140, 232, 0.26) 0%, rgba(20, 17, 38, 0.7) 100%)',
+        boxShadow: '0 22px 54px -30px rgba(185, 140, 232, 0.75)',
+        maxWidth: '1000px',
+    },
+    centerpieceBadge: {
+        position: 'absolute',
+        top: '1rem',
+        left: '1rem',
+        fontSize: '0.75rem',
+        letterSpacing: '0.08em',
+        textTransform: 'uppercase',
+        color: 'var(--text-primary)',
+        background: 'rgba(11, 10, 19, 0.72)',
+        border: '1px solid rgba(185, 140, 232, 0.58)',
+        borderRadius: '999px',
+        padding: '0.4rem 0.7rem',
+        zIndex: 1,
+    },
+    centerpieceImage: {
+        width: '100%',
+        height: 'auto',
+        display: 'block',
+        borderRadius: 'calc(var(--radius-lg) - 8px)',
+        objectFit: 'contain',
     },
     photoFrame: {
         breakInside: 'avoid',
