@@ -50,7 +50,7 @@ const Projects = () => {
     const projects = [
         { id: 1, title: 'TrekMate', category: 'Mobile App', image: './tm.jpg' },
         { id: 2, title: 'WorkHive', category: 'Web-Platfrom', image: './wh.jpg' },
-        { id: 3, title: 'The Hunger Games: UX Edition', category: 'UX Case Study', image: './hgx.jpg' },
+        { id: 3, title: 'The Hunger Games: UX Edition', category: 'UX Case Study', image: './hgx1.jpg' },
         { id: 4, title: 'Lens & Light', category: 'Photography Collection', image: './hosue.jpg' }
     ];
 
