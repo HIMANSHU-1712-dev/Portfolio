@@ -629,7 +629,7 @@ const Home = () => {
                         />
                         <ProjectCard
                             to="/projects/3"
-                            img="./sample.jpg"
+                            img="./hgx2.jpg"
                             alt="The Hunger Games: UX Case Study"
                             title="The Hunger Games: UX Case Study"
                             desc="A data-driven UX study comparing Swiggy and Zomato across key user journeys."
