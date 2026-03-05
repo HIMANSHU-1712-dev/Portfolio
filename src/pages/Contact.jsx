@@ -20,11 +20,11 @@ const Contact = () => {
                     <div style={styles.contactDetails} className="contact-details">
                         <div style={styles.contactItem}>
                             <span style={styles.label}>Email</span>
-                            <a href="mailto:hello@kabiroscope.com" style={styles.link} className="contact-link">hello@kabiroscope.com</a>
+                            <a href="mailto:hello@kabiroscope.com" style={styles.link} className="contact-link">kabiroscope@gmail.com</a>
                         </div>
                         <div style={styles.contactItem}>
                             <span style={styles.label}>Social</span>
-                            <a href="#" style={styles.link} className="contact-link">LinkedIn</a>
+                            <a href="#" style={styles.link} className="https://www.linkedin.com/in/kabirsharma192003/">LinkedIn</a>
                         </div>
                     </div>
                 </div>
