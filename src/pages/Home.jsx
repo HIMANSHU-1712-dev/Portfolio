@@ -621,7 +621,7 @@ const Home = () => {
                     <div style={styles.projectGrid} className="home-project-grid">
                         <ProjectCard
                             to="/projects/2"
-                            img="./bmw.jpg"
+                            img="./wh.jpg"
                             alt="Workhive"
                             title="Workhive"
                             desc="A unified platform for job search and professional networking."
