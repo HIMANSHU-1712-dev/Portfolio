@@ -51,7 +51,7 @@ const Projects = () => {
         { id: 1, title: 'TrekMate', category: 'Mobile App', image: './tmcp.png' },
         { id: 2, title: 'WorkHive', category: 'Web-Platfrom', image: './sample.jpg' },
         { id: 3, title: 'The Hunger Games', category: 'UX Case Study', image: './sample.jpg' },
-        { id: 4, title: 'Lens & Light', category: 'Photography Collection', image: './sample.jpg' }
+        { id: 4, title: 'Lens & Light', category: 'Photography Collection', image: './house.jpg' }
     ];
 
     return (
