@@ -3,12 +3,25 @@ import { NavLink } from 'react-router-dom';
 import '../index.css';
 
 const Navbar = () => {
+    const logoLetters = 'kabiroscope'.split('');
+
     return (
         <nav style={styles.nav} className="site-nav">
             <div style={styles.container} className="container site-nav-inner">
                 {/* Logo */}
                 <NavLink to="/" style={styles.logoLink}>
-                    <span style={styles.logoText} className="site-nav-logo">kabiroscope</span>
+                    <span style={styles.logoText} className="site-nav-logo" aria-label="kabiroscope">
+                        {logoLetters.map((char, index) => (
+                            <span
+                                key={`${char}-${index}`}
+                                className="site-nav-logo-letter"
+                                style={{ '--logo-index': index }}
+                                aria-hidden="true"
+                            >
+                                {char}
+                            </span>
+                        ))}
+                    </span>
                 </NavLink>
 
                 {/* Links */}
@@ -62,10 +75,9 @@ const styles = {
         fontSize: '1.55rem',
         fontWeight: 700,
         letterSpacing: '-0.05em',
-        background: 'linear-gradient(135deg, #f0e5ff 0%, #b98ce8 50%, #8778da 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 0,
         transition: 'filter 0.3s',
     },
     links: {
