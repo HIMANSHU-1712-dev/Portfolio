@@ -53,14 +53,18 @@ const PhysicsPlayground = () => {
         };
 
         const ground = Bodies.rectangle(width / 2, height + 25, width + 100, 50, wallOptions);
-        const ceiling = Bodies.rectangle(width / 2, -100, width + 100, 50, wallOptions);
-        const leftWall = Bodies.rectangle(-25, height / 2, 50, height + 200, wallOptions);
-        const rightWall = Bodies.rectangle(width + 25, height / 2, 50, height + 200, wallOptions);
+        const leftWall = Bodies.rectangle(-25, height / 2, 50, height + 4000, wallOptions);
+        const rightWall = Bodies.rectangle(width + 25, height / 2, 50, height + 4000, wallOptions);
 
-        World.add(world, [ground, ceiling, leftWall, rightWall]);
+        World.add(world, [ground, leftWall, rightWall]);
 
         // Add interactive skill blocks
-        const skills = ['React', 'Three.js', 'Framer Motion', 'Node.js', 'UI/UX Design', 'WebGL', 'CSS3', 'Jira', 'Figma'];
+        const skills = [
+            'React', 'Three.js', 'Framer Motion', 'Node.js', 'UI/UX Design',
+            'WebGL', 'CSS3', 'Jira', 'Figma', 'TypeScript', 'JavaScript(ES6+)',
+            'Tailwind CSS', 'Redux', 'Next.js', 'HTML5', 'Git', 'Vite', 'GraphQL',
+            'Jest', 'Webpack', 'SASS/SCSS', 'Python'
+        ];
 
         const colors = ['#b98ce8', '#8778da', '#f0e5ff', '#c77dff', '#e040fb'];
 
@@ -136,7 +140,6 @@ const PhysicsPlayground = () => {
 
             // Move walls
             Matter.Body.setPosition(ground, { x: newWidth / 2, y: height + 25 });
-            Matter.Body.setPosition(ceiling, { x: newWidth / 2, y: -100 });
             Matter.Body.setPosition(rightWall, { x: newWidth + 25, y: height / 2 });
         };
 
