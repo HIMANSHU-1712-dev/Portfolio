@@ -5,6 +5,7 @@ import { AnimatePresence } from 'framer-motion';
 // Components
 import Layout from './components/Layout';
 import FlightIntro from './components/FlightIntro';
+import AvatarIntro from './components/AvatarIntro';
 
 // Pages
 import Home from './pages/Home';
@@ -52,20 +53,29 @@ const AnimatedRoutes = () => {
 };
 
 const App = () => {
-  // Show intro on every load (for testing — re-enable sessionStorage before going live)
-  const [introPhase, setIntroPhase] = useState('playing'); // 'playing', 'fading', 'done'
+  // Intro Phases: 'flight' -> 'flight-fading' -> 'avatar' -> 'done'
+  const [introPhase, setIntroPhase] = useState('flight');
 
   return (
     <Router>
       <ScrollToTop />
-      {/* Mount AnimatedRoutes as soon as the intro starts fading out */}
-      {introPhase !== 'playing' && <AnimatedRoutes />}
 
-      {/* Keep FlightIntro in the DOM until it completely finishes fading */}
-      {introPhase !== 'done' && (
-        <FlightIntro
-          onFadeStart={() => setIntroPhase('fading')}
+      {/* Mount AnimatedRoutes underneath AvatarIntro as soon as it starts fading out */}
+      {(introPhase === 'avatar-fading' || introPhase === 'done') && <AnimatedRoutes />}
+
+      {/* Mount AvatarIntro underneath FlightIntro as it fades out. Keeps it alive until user clicks Enter */}
+      {(introPhase === 'flight-fading' || introPhase === 'avatar' || introPhase === 'avatar-fading') && (
+        <AvatarIntro
+          onFadeStart={() => setIntroPhase('avatar-fading')}
           onComplete={() => setIntroPhase('done')}
+        />
+      )}
+
+      {/* Keep FlightIntro in the DOM until it completely finishes fading out */}
+      {(introPhase === 'flight' || introPhase === 'flight-fading') && (
+        <FlightIntro
+          onFadeStart={() => setIntroPhase('flight-fading')}
+          onComplete={() => setIntroPhase('avatar')}
         />
       )}
     </Router>
