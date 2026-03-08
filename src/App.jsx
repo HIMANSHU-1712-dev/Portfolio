@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 // Components
 import Layout from './components/Layout';
+import FlightIntro from './components/FlightIntro';
 
 // Pages
 import Home from './pages/Home';
@@ -51,10 +52,22 @@ const AnimatedRoutes = () => {
 };
 
 const App = () => {
+  // Show intro on every load (for testing — re-enable sessionStorage before going live)
+  const [introPhase, setIntroPhase] = useState('playing'); // 'playing', 'fading', 'done'
+
   return (
     <Router>
       <ScrollToTop />
-      <AnimatedRoutes />
+      {/* Mount AnimatedRoutes as soon as the intro starts fading out */}
+      {introPhase !== 'playing' && <AnimatedRoutes />}
+
+      {/* Keep FlightIntro in the DOM until it completely finishes fading */}
+      {introPhase !== 'done' && (
+        <FlightIntro
+          onFadeStart={() => setIntroPhase('fading')}
+          onComplete={() => setIntroPhase('done')}
+        />
+      )}
     </Router>
   );
 };
