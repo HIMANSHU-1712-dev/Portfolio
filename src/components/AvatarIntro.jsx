@@ -4,9 +4,11 @@ import { useGLTF } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 
+const MODEL_PATH = `${import.meta.env.BASE_URL}models/rajesh_avatar.glb`;
+
 // ─── 3D Avatar that tracks cursor ─────────────────────────────────────────────
 const AvatarModel = () => {
-    const { scene } = useGLTF('/models/rajesh_avatar.glb');
+    const { scene } = useGLTF(MODEL_PATH);
     const groupRef = useRef();
     const headBoneRef = useRef(null);
     const mouseRef = useRef({ x: 0, y: 0 });
@@ -281,6 +283,6 @@ const AvatarIntro = ({ onComplete, onFadeStart }) => {
 };
 
 // Preload the model
-useGLTF.preload('/models/rajesh_avatar.glb');
+useGLTF.preload(MODEL_PATH);
 
 export default AvatarIntro;
